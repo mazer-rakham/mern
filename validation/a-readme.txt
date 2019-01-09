@@ -1,0 +1,1 @@
+These folders are for the server side valitation for registering and logging in.

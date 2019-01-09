@@ -1,0 +1,1 @@
+This routes folder is for the url routing on the server side
