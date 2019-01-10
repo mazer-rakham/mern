@@ -15,6 +15,7 @@ const keys = require("../../config/keys");
 const passport = require("passport");
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
 // Load user model
 const User = require("../../models/User");
 // @route      GET api/users/test
@@ -33,6 +34,7 @@ router.post("/register", (req, res) => {
   // the below code checks the input on the register route to the function we created in the register.js
   // file and the validate package and uses es6 destructuring to have 2 values
   const { errors, isValid } = validateRegisterInput(req.body);
+
   if (!isValid) {
     // if the input fields are not valid
     return res.status(400).json(errors); // then send the errors to the user
@@ -84,6 +86,12 @@ router.post("/register", (req, res) => {
 // @access Public
 
 router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) {
+    // if the input fields are not valid
+    return res.status(400).json(errors); // then send the errors to the user
+  }
   const email = req.body.email;
   const password = req.body.password;
 
@@ -93,8 +101,9 @@ router.post("/login", (req, res) => {
   }).then(user => {
     // check for user
     if (!user) {
+      errors.email = "USer not found";
       return res.status(404).json({
-        email: "User not found"
+        email: errors
       });
     }
 
@@ -122,8 +131,9 @@ router.post("/login", (req, res) => {
           }
         );
       } else {
+        errors.password = "Password incorrect";
         return res.status(400).json({
-          password: "Password Incorrect"
+          password: errors
         });
       }
     });
