@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 
+// bring in validator files
+const validatePostInput = require('../../validation/post');
+
 const Post = require('../../models/Post');
 // @route      GET api/posts/test
 // @desc       Tests post route
@@ -19,10 +22,15 @@ router.get("/test", (req, res) => res.json({
 router.post('/', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
+    const {errors, isValid } = validatePostInput(req.body);
+
+    if(!isValid) {
+        return res.status(400).json(errors);
+    }
     const newPost = new Post({
         text: req.body.text,
-        name: req.bodyname,
-        avatar: req.body.name,
+        name: req.body.name,
+        avatar: req.body.avatar,
         user: req.user.id
     });
     newPost.save().then(post => res.json(post));
@@ -30,4 +38,4 @@ router.post('/', passport.authenticate('jwt', {
 
 
 
-module.exports = router;
+module.exports = router;3363332600
