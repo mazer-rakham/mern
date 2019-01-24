@@ -1,0 +1,1 @@
+Actions are anything that users do on your application
