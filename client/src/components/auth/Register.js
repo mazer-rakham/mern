@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
+// bleow is used to route from the actions
+import { withRouter } from "react-router-dom";
 import classnames from "classnames";
 import { registerUser } from "../../actions/authActions";
 import { connect } from "react-redux";
@@ -45,7 +46,9 @@ class Register extends Component {
       password: this.state.password,
       password2: this.state.password2
     };
-    this.props.registerUser(newUser);
+    // the this.props.history is from wrapping the export in withRouter and passes
+    // the history to the action 
+    this.props.registerUser(newUser, this.props.history);
   }
 
   render() {
@@ -53,7 +56,7 @@ class Register extends Component {
     const { errors } = this.state;    
     return (
       <div className="register">
-        {user ? user.name : null}
+       
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -154,7 +157,8 @@ class Register extends Component {
 // map the property types, it is a react thing i guess i don't know
 Register.propTvpes = {
   registerUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 // this function gets any of the auth state into the component
@@ -168,4 +172,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { registerUser }
-)(Register);
+)(withRouter(Register));
