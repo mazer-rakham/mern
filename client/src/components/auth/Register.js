@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import  PropTypes  from "prop-types";
-import axios from "axios";
+import PropTypes from "prop-types";
+
 import classnames from "classnames";
 import { registerUser } from "../../actions/authActions";
 import { connect } from "react-redux";
@@ -23,6 +23,14 @@ class Register extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    // get roors from redux state, put into props, then if errors are included in the properties
+    // pass it to the component state errors pbject above in the constructor
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onChange(e) {
     // set the value to the name attributes
     this.setState({ [e.target.name]: e.target.value });
@@ -37,21 +45,15 @@ class Register extends Component {
       password: this.state.password,
       password2: this.state.password2
     };
-this.props.registerUser(newUser);
-
-    // the syntax of this is the users.js file in the routes folder in the server section
-    // axios
-    //   .post("/api/users/register", newUser)
-    //   .then(res => console.log(res.data))
-    //   .catch(err => this.setState({ errors: err.response.data }));
+    this.props.registerUser(newUser);
   }
 
   render() {
-    const { errors } = this.state;
-    const {user} = this.props.auth;
+    // errors are still coming from the component state with the componentWillRecieveProps function above
+    const { errors } = this.state;    
     return (
       <div className="register">
-      {user ? user.name :  null }
+        {user ? user.name : null}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -67,7 +69,7 @@ this.props.registerUser(newUser);
                     // this classnames property is from the library classnames
                     className={classnames("form-control form-control-lg", {
                       //only add this class if there is a value in the errors name in the state which comes from validator
-                      "is-invalid": errors.name 
+                      "is-invalid": errors.name
                     })}
                     placeholder="Name"
                     name="name"
@@ -78,12 +80,14 @@ this.props.registerUser(newUser);
                     onChange={this.onChange}
                   />
                   {/* below is a javascript expression to dynamically display this div only if there is an error */}
-                  {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
+                  {errors.name && (
+                    <div className="invalid-feedback">{errors.name}</div>
+                  )}
                 </div>
                 <div className="form-group">
                   <input
                     type="email"
-                    className={classnames("form-control form-control-lg",{
+                    className={classnames("form-control form-control-lg", {
                       "is-invalid": errors.email
                     })}
                     placeholder="Email Address"
@@ -94,7 +98,9 @@ this.props.registerUser(newUser);
                     // handle typing in the input
                     onChange={this.onChange}
                   />
-                  {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
+                  {errors.email && (
+                    <div className="invalid-feedback">{errors.email}</div>
+                  )}
                   <small className="form-text text-muted">
                     This site uses Gravatar so if you want a profile image, use
                     a Gravatar email
@@ -103,7 +109,7 @@ this.props.registerUser(newUser);
                 <div className="form-group">
                   <input
                     type="password"
-                    className={classnames("form-control form-control-lg",{
+                    className={classnames("form-control form-control-lg", {
                       "is-invalid": errors.password
                     })}
                     placeholder="Password"
@@ -114,12 +120,14 @@ this.props.registerUser(newUser);
                     // handle typing in the input
                     onChange={this.onChange}
                   />
-                  {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
+                  {errors.password && (
+                    <div className="invalid-feedback">{errors.password}</div>
+                  )}
                 </div>
                 <div className="form-group">
                   <input
                     type="password"
-                    className={classnames("form-control form-control-lg",{
+                    className={classnames("form-control form-control-lg", {
                       "is-invalid": errors.password2
                     })}
                     placeholder="Confirm Password"
@@ -130,7 +138,9 @@ this.props.registerUser(newUser);
                     // handle typing in the input
                     onChange={this.onChange}
                   />
-                  {errors.password2 && (<div className="invalid-feedback">{errors.password2}</div>)}
+                  {errors.password2 && (
+                    <div className="invalid-feedback">{errors.password2}</div>
+                  )}
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
@@ -145,14 +155,17 @@ this.props.registerUser(newUser);
 Register.propTvpes = {
   registerUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
-}
+};
 
 // this function gets any of the auth state into the component
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   // and now you can access the application state of auth
   // the last auth comes from the root reducer
-  auth: state.auth
-})
+  auth: state.auth,
+  errors: state.errors
+});
 
-
-export default connect(mapStateToProps, {registerUser})(Register);
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(Register);
