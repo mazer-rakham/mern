@@ -25,8 +25,8 @@ class Register extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // get roors from redux state, put into props, then if errors are included in the properties
-    // pass it to the component state errors pbject above in the constructor
+    // get errors from redux state, put into props, then if errors are included in the properties
+    // pass it to the component state errors object above in the constructor
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
