@@ -23,7 +23,11 @@ class Register extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
-
+  componentDidMount() {
+    if(this.props.auth.isAuthenticated){
+      this.props.history.push('/dashboard');
+    }
+  }
   componentWillReceiveProps(nextProps) {
     // get errors from redux state, put into props, then if errors are included in the properties
     // pass it to the component state errors object above in the constructor
@@ -55,7 +59,7 @@ class Register extends Component {
     // errors are still coming from the component state with the componentWillRecieveProps function above
     const { errors } = this.state;    
     return (
-      <div className="register">
+      <div className="register">s
        
         <div className="container">
           <div className="row">
