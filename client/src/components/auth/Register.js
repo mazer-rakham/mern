@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import classnames from "classnames";
 import { registerUser } from "../../actions/authActions";
 import { connect } from "react-redux";
+import TextFieldGroup from "../common/TextFieldGroup";
 // each form field has to have its own state in the component
 // this is component state NOT application state
 
@@ -70,14 +71,11 @@ class Register extends Component {
               </p>
               {/* forms do not need an action in react */}
               <form onSubmit={this.onSubmit} noValidate>
-                <div className="form-group">
-                  <input
+              
+                  <TextFieldGroup
                     type="text"
                     // this classnames property is from the library classnames
-                    className={classnames("form-control form-control-lg", {
-                      //only add this class if there is a value in the errors name in the state which comes from validator
-                      "is-invalid": errors.name
-                    })}
+                    
                     placeholder="Name"
                     name="name"
                     // this is linking the input to the state value in the component above
@@ -87,10 +85,8 @@ class Register extends Component {
                     onChange={this.onChange}
                   />
                   {/* below is a javascript expression to dynamically display this div only if there is an error */}
-                  {errors.name && (
-                    <div className="invalid-feedback">{errors.name}</div>
-                  )}
-                </div>
+                
+               
                 <div className="form-group">
                   <input
                     type="email"

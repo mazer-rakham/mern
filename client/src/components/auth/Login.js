@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
-import classnames from 'classnames';
+
+import TextFieldGroup from "../common/TextFieldGroup";
 class Login extends Component {
   // this 'constructs' the look of the initial state object of the react component
   constructor() {
@@ -32,18 +33,18 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    if(this.props.auth.isAuthenticated){
-      this.props.history.push('/dashboard');
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
     }
 
-    if(nextProps.errors) {
-      this.setState({errors: nextProps.errors});
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
     }
   }
   render() {
@@ -58,38 +59,21 @@ class Login extends Component {
                 Sign in to your DevConnector account
               </p>
               <form onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className={classnames("form-control form-control-lg", {
-                      //only add this class if there is a value in the errors name in the state which comes from validator
-                      "is-invalid": errors.email
-                    })}
-                    placeholder="Email Address"
-                    value={this.state.email}
-                    onChange={this.onChange}
-                    name="email"
-                  />
-                   {errors.email && (
-                    <div className="invalid-feedback">{errors.email}</div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", {
-                      //only add this class if there is a value in the errors name in the state which comes from validator
-                      "is-invalid": errors.password
-                    })}
-                    placeholder="Password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                    name="password"
-                  />
-                   {errors.password && (
-                    <div className="invalid-feedback">{errors.password}</div>
-                  )}
-                </div>
+                <TextFieldGroup
+                  placeholder="Email Address"
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.onChange}
+                  error={errors.email}
+                />
+                <TextFieldGroup
+                  placeholder="Password"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                  error={errors.password}
+                />
+
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
