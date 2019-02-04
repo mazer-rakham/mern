@@ -25,8 +25,8 @@ class Register extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
-    if(this.props.auth.isAuthenticated){
-      this.props.history.push('/dashboard');
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -52,16 +52,16 @@ class Register extends Component {
       password2: this.state.password2
     };
     // the this.props.history is from wrapping the export in withRouter and passes
-    // the history to the action 
+    // the history to the action
     this.props.registerUser(newUser, this.props.history);
   }
 
   render() {
     // errors are still coming from the component state with the componentWillRecieveProps function above
-    const { errors } = this.state;    
+    const { errors } = this.state;
     return (
-      <div className="register">s
-       
+      <div className="register">
+        s
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -71,80 +71,38 @@ class Register extends Component {
               </p>
               {/* forms do not need an action in react */}
               <form onSubmit={this.onSubmit} noValidate>
-              
-                  <TextFieldGroup
-                    type="text"
-                    // this classnames property is from the library classnames
-                    
-                    placeholder="Name"
-                    name="name"
-                    // this is linking the input to the state value in the component above
-                    value={this.state.name}
-                    // since the value is set by the state you have to call a function to
-                    // handle typing in the input
-                    onChange={this.onChange}
-                  />
-                  {/* below is a javascript expression to dynamically display this div only if there is an error */}
-                
-               
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.email
-                    })}
-                    placeholder="Email Address"
-                    name="email"
-                    // this is linking the input to the state value in the component above
-                    value={this.state.email}
-                    // since the value is set by the state you have to call a function to
-                    // handle typing in the input
-                    onChange={this.onChange}
-                  />
-                  {errors.email && (
-                    <div className="invalid-feedback">{errors.email}</div>
-                  )}
-                  <small className="form-text text-muted">
-                    This site uses Gravatar so if you want a profile image, use
-                    a Gravatar email
-                  </small>
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.password
-                    })}
-                    placeholder="Password"
-                    name="password"
-                    // this is linking the input to the state value in the component above
-                    value={this.state.password}
-                    // since the value is set by the state you have to call a function to
-                    // handle typing in the input
-                    onChange={this.onChange}
-                  />
-                  {errors.password && (
-                    <div className="invalid-feedback">{errors.password}</div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.password2
-                    })}
-                    placeholder="Confirm Password"
-                    name="password2"
-                    // this is linking the input to the state value in the component above
-                    value={this.state.password2}
-                    // since the value is set by the state you have to call a function to
-                    // handle typing in the input
-                    onChange={this.onChange}
-                  />
-                  {errors.password2 && (
-                    <div className="invalid-feedback">{errors.password2}</div>
-                  )}
-                </div>
+                <TextFieldGroup
+                  placeholder="Name"
+                  name="name"
+                  value={this.state.name}
+                  onChange={this.onChange}
+                  error={errors.name}
+                />
+                <TextFieldGroup
+                  placeholder="Email"
+                  name="email"
+                  type="email"
+                  value={this.state.email}
+                  onChange={this.onChange}
+                  error={errors.email}
+                  info=" This site uses Gravatar so if you want a profile image, use a
+                  Gravatar email"
+                />              
+                <TextFieldGroup
+                  error={errors.password}
+                  placeholder="password"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                />
+                <TextFieldGroup
+                  error={errors.password2}
+                  placeholder="password"
+                  name="password2"
+                  value={this.state.password2}
+                  onChange={this.onChange}
+                />
+
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
@@ -155,7 +113,7 @@ class Register extends Component {
   }
 }
 // map the property types, it is a react thing i guess i don't know
-Register.propTvpes = {
+Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired

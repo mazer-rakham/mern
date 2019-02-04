@@ -1,27 +1,34 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // this is a react component that provides the "store" (application level state(data))
 import { Provider } from "react-redux";
 // bring in the cookie to see if logged in
-import jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 
-// export from a cost insdead of default you have to use destructuring
-import {setCurrentUser, logoutUser} from './actions/authActions';
-
+// export from a cost instead of default you have to use destructuring
+import { setCurrentUser, logoutUser } from "./actions/authActions";
 
 // bring in the redux store for use
 import store from "./store";
-import "./App.css";
 
+// bring in the private routes
+import PrivateRoute from "./components/common/PrivateRoute";
+
+import "./App.css";
 
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Dashboard from "./components/dashboard/Dashboard";
+import { clearCurrentProfile } from "./actions/profileActions";
+import CreateProfile from "./components/create-profile/CreateProfile";
+import EditProfile from './components/edit-profile/EditProfile';
+import AddExperience from "./components/add-credentials/AddExperience";
 // check for token
-if(localStorage.jwtToken){
+if (localStorage.jwtToken) {
   // set the auth token header auth
   setAuthToken(localStorage.jwtToken);
   // decode the user info and expriation
@@ -31,16 +38,15 @@ if(localStorage.jwtToken){
 
   // check for expired token
   const currentTime = Date.now() / 1000;
-  if(decoded.exp < currentTime) {
+  if (decoded.exp < currentTime) {
     store.dispatch(logoutUser());
     // TODO: Clear the current profile
+    store.dispatch(clearCurrentProfile());
 
-    
     // redirect to login
-    window.location.href= '/login';
+    window.location.href = "/login";
   }
 }
-
 
 class App extends Component {
   render() {
@@ -55,6 +61,18 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/edit-profile" component={EditProfile} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/add-experience" component={AddExperience} />
+              </Switch>
             </div>
             <Footer />
           </div>
