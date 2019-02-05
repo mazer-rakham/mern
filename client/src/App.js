@@ -27,6 +27,9 @@ import { clearCurrentProfile } from "./actions/profileActions";
 import CreateProfile from "./components/create-profile/CreateProfile";
 import EditProfile from './components/edit-profile/EditProfile';
 import AddExperience from "./components/add-credentials/AddExperience";
+import AddEducation from './components/add-credentials/AddEducation';
+import Profiles from './components/profiles/Profiles';
+import Profile from './components/profile/Profile';
 // check for token
 if (localStorage.jwtToken) {
   // set the auth token header auth
@@ -58,6 +61,7 @@ class App extends Component {
             <Navbar />
             {/* you need to make the path exact so extra stuff doesn't show up on the screen */}
             <Route exact path="/" component={Landing} />
+            <Route exact path="/profile/:handle" component={Profile} />
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
@@ -73,6 +77,13 @@ class App extends Component {
               <Switch>
                 <PrivateRoute exact path="/add-experience" component={AddExperience} />
               </Switch>
+              <Switch>
+                <PrivateRoute exact path="/add-education" component={AddEducation} />
+              </Switch>
+             
+                <Route exact path="/profiles" component={Profiles} />
+                
+             
             </div>
             <Footer />
           </div>
